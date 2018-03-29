@@ -14,7 +14,8 @@ import (
 var (
 	app    = iris.New()
 	method = []string{"Get", "Post", "Put", "Delete"}
-	paths  = context.Map{}
+
+	paths = context.Map{}
 )
 
 var conf = iris.Configuration{ // default configuration:

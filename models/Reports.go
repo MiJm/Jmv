@@ -1,6 +1,7 @@
 package models
 
 import (
+	"errors"
 	"fmt"
 	"time"
 
@@ -32,6 +33,14 @@ func (this *Reports) RemoveShare(shareId string) {
 	if this.ReportShares != nil {
 		delete(this.ReportShares, shareId)
 	}
+	this.Update()
+}
+
+func (this *Reports) Delete() error {
+	if this.ReportId == EmptyId {
+		return errors.New("id be empty")
+	}
+	return this.Collection(this).RemoveId(this.ReportId)
 }
 
 func (this *Reports) Insert() {
@@ -46,4 +55,11 @@ func (this *Reports) Update() {
 		update := bson.M{"$set": *this}
 		this.Collection(this).UpdateId(this.ReportId, update)
 	}
+}
+
+func (this *Reports) List(query interface{}) (rs []*Reports) {
+	if this.ReportId == EmptyId {
+		this.Collection(this).Find(query).All(&rs)
+	}
+	return
 }
